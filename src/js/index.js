@@ -1,7 +1,14 @@
 // Global app controller
 import '../css/style.css';
 
-require('../img/favicon.png');
-require('../img/icons.svg');
-require('../img/logo.png');
-require('../img/test-1.jpg');
+import '../img/favicon.png';
+import '../img/icons.svg';
+import '../img/logo.png';
+import '../img/test-1.jpg';
+
+import Search from './models/Search';
+
+const search = new Search('pizza');
+console.log(search);
+
+search.getResults();
