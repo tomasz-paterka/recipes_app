@@ -4,11 +4,11 @@ import '../css/style.css';
 import '../img/favicon.png';
 import '../img/icons.svg';
 import '../img/logo.png';
-// import '../img/test-1.jpg';
 
 import Search from './models/Search';
 import Recipe from './models/Recipe';
 import * as searchView from './views/searchView';
+import * as recipeView from './views/recipeView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
 // Global state of the app
@@ -62,6 +62,12 @@ const controlRecipe = async () => {
   const id = window.location.hash.replace('#', '');
 
   if (id) {
+    recipeView.clearRecipe();
+    renderLoader(elements.recipe);
+
+    if (state.search) searchView.highligthSelected(id);
+    
+
     state.recipe = new Recipe(id);
 
     try {
@@ -70,7 +76,9 @@ const controlRecipe = async () => {
 
       state.recipe.calcTime();
       state.recipe.calcServings();
-      console.log(state.recipe);
+      
+      clearLoader();
+      recipeView.renderRecipe(state.recipe);
     } catch (err){
       console.log(err);
     }
