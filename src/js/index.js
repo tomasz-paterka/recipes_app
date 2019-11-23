@@ -7,6 +7,7 @@ import '../img/logo.png';
 // import '../img/test-1.jpg';
 
 import Search from './models/Search';
+import Recipe from './models/Recipe';
 import * as searchView from './views/searchView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
@@ -18,9 +19,9 @@ import { elements, renderLoader, clearLoader } from './views/base';
 
 const state = {};
 
+// Search Controller
 const controlSearch = async () => {
   const query = searchView.getInput();
-  // console.log(query);
   if (query) {
     state.search = new Search(query);
 
@@ -29,12 +30,15 @@ const controlSearch = async () => {
 
     renderLoader(elements.searchRes);
 
-    await state.search.getResults();
-    console.log(state.search.result);
-
-    clearLoader();
-
-    searchView.renderResults(state.search.result);
+    try {
+      await state.search.getResults();
+      // console.log(state.search.result);
+      clearLoader();
+      searchView.renderResults(state.search.result);
+    } catch (err){
+      console.log(err);
+      clearLoader();
+    }
   }
 };
 
@@ -51,3 +55,25 @@ elements.searchResPages.addEventListener('click', e => {
     searchView.renderResults(state.search.result, goToPage);
   }
 });
+
+
+// Recipe Controller
+const controlRecipe = async () => {
+  const id = window.location.hash.replace('#', '');
+
+  if (id) {
+    try {
+      state.recipe = new Recipe(id);
+
+      await state.recipe.getRecipe();
+
+      state.recipe.calcTime();
+      state.recipe.calcServings();
+      console.log(state.recipe);
+    } catch (err){
+      console.log(err);
+    }
+  }
+};
+
+['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
