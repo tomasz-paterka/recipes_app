@@ -18,7 +18,7 @@ export default class Search {
 
 
 
-// You can only search recipes for the terms "pizza", "bacon" and "broccoli";
+
 
 
 
